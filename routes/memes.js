@@ -5,7 +5,7 @@ const { cloudinary } = require("../utils/cloudinary");
 const router = Router();
 
 router.get("/", async (req, res) => {
-  const allMemes = await Meme.find().select("url name");
+  const allMemes = await Meme.find();
   res.status(200).json(allMemes);
 });
 
