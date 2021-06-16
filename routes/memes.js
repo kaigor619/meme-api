@@ -5,7 +5,7 @@ const { cloudinary } = require("../utils/cloudinary");
 const router = Router();
 
 router.get("/", async (req, res) => {
-  const allMemes = await Meme.find();
+  const allMemes = await Meme.find().select("name url");
   res.status(200).json(allMemes);
 });
 
@@ -14,7 +14,9 @@ router.get("/backgrounds", async (req, res) => {
     const result = await cloudinary.api.resources({
       type: "upload",
       prefix: "meme_templates",
+      max_results: 500,
     });
+
     const backgrounds = result.resources.map(
       ({ url, asset_id, width, height }) => ({
         url,
@@ -44,7 +46,6 @@ router.post(
     { name: "canvas_img" },
   ]),
   (req, res) => {
-    console.log("create");
     const { name, canvas, elements } = req.body;
 
     const { canvas_background_img, canvas_img } = req.files;
